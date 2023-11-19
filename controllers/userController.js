@@ -7,18 +7,20 @@ import User from '../models/userModel.js';
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  // console.log(req)
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
+  if (user && (await user.matchPassword(password))) {    
     
-    generateToken(res, user._id);  
+    const token = generateToken(res, user._id);
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token
     });
   } else {
     res.status(401);
@@ -33,6 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
+  // console.log(userExists)
 
   if (userExists) {
     res.status(400);
