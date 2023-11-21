@@ -13,14 +13,15 @@ const authUser = asyncHandler(async (req, res) => {
 
   if (user && (await user.matchPassword(password))) {    
     
-    const token =  generateToken(res, user._id);
+    // const token = 
+    generateToken(res, user._id);
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token
+      // token
     });
   } else {
     res.status(401);
@@ -49,14 +50,13 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const token =  generateToken(res, user._id);
+    generateToken(res, user._id);
 
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token
     });
   } else {
     res.status(400);
