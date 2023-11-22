@@ -19,6 +19,8 @@ const app = express();
 const corsOpts = {
     origin: '*',
   
+    credentials: true,
+    
     methods: [
       'GET',
       'POST',
@@ -27,10 +29,11 @@ const corsOpts = {
   
     allowedHeaders: [
       'Content-Type',
+      'Authorization'
     ],
   };
 
-app.use(cors());
+app.use(cors(corsOpts));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
