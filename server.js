@@ -8,6 +8,7 @@ const port = process.env.PORT || 5000
 import productRoute from './routes/productRoutes.js';
 import userRoute from './routes/userRoute.js'
 import orderRoutes from './routes/orderRoute.js'
+import addProductRoute from './routes/addProductRoute.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 connectDB();
@@ -46,6 +47,7 @@ app.get('/', (req, res)=>{
 app.use('/api/products', productRoute)
 app.use('/api/users', userRoute)
 app.use('/api/orders', orderRoutes)
+app.use('/api/addProduct', addProductRoute)
 
 app.use(notFound);
 app.use(errorHandler)
