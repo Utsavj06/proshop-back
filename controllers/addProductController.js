@@ -11,7 +11,7 @@ cloudinary.config({
 });
 
 const addProductToDB = async(prodData, imgUrl) => {
-  const {name , desc, brnd, catry, prce, stk, rating, review} = prodData;
+  const {name , desc, brnd, catry, prce, stk, rating, review, userId} = prodData;
 
   await Product.create({
     name,
@@ -23,6 +23,7 @@ const addProductToDB = async(prodData, imgUrl) => {
     rating: +rating,
     countInStock: +stk,
     price: +prce,
+    user: userId,
   });
 }
 
