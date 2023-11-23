@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
+import Product from "../models/productModel.js";
 
 dotenv.config();
 
@@ -8,6 +9,22 @@ cloudinary.config({
   api_key: process.env.CLOUD_KEY,
   api_secret: process.env.CLOUD_SECRET,
 });
+
+const addProductToDB = async(prodData, imgUrl) => {
+  const {name , desc, brnd, catry, prce, stk, rating, review} = prodData;
+
+  await Product.create({
+    name,
+    image: imgUrl,
+    brand: brnd,
+    category: catry,
+    description: desc,
+    numReviews: +review,
+    rating: +rating,
+    countInStock: +stk,
+    price: +prce,
+  });
+}
 
 export const addProduct = async (req, res) => {
   const proshop_products = "proshop_products";
@@ -19,10 +36,10 @@ export const addProduct = async (req, res) => {
         folder: proshop_products,
       }
     );
-    console.log(uploadResult.secure_url);
+
+    addProductToDB(req.fields, uploadResult.secure_url)
+
   } catch (err) {
     console.log(err);
   }
-
-  res.status(200);
 };
