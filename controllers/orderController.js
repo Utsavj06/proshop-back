@@ -152,7 +152,7 @@ const getOrders = asyncHandler(async (req, res) => {
 
 const makePayment = async(req, res) => {
   const {cartItems: products} = req.body;
-
+  
   const lineItems = products.map((product)=>({
       price_data:{
           currency:"inr",
@@ -173,7 +173,7 @@ const makePayment = async(req, res) => {
       cancel_url:"http://localhost:3000/cancel",
   });
 
-  res.json({id:session.id})
+  res.json({url: session.url})
 
 }
 
