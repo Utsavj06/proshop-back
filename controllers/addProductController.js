@@ -10,7 +10,7 @@ cloudinary.config({
   api_secret: process.env.CLOUD_SECRET,
 });
 
-const addProductToDB = async(prodData, imgUrl) => {
+const addProductToDB = async(prodData, imgUrl, res) => {
   const {name , desc, brnd, catry, prce, stk, rating, review, userId} = prodData;
 
   await Product.create({
@@ -25,6 +25,8 @@ const addProductToDB = async(prodData, imgUrl) => {
     price: +prce,
     user: userId,
   });
+
+  res.send('Product Added')
 }
 
 export const addProduct = async (req, res) => {
@@ -38,7 +40,7 @@ export const addProduct = async (req, res) => {
       }
     );
 
-    addProductToDB(req.fields, uploadResult.secure_url)
+    addProductToDB(req.fields, uploadResult.secure_url, res); 
 
   } catch (err) {
     console.log(err);

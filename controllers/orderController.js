@@ -3,7 +3,9 @@ import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import { calcPrices } from '../utils/calcPrices.js';
 // import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
+import Stripe from 'stripe';
 
+const stripe = new Stripe('sk_test_51N2bqvSIEzY742rCxgOT7qV0PJmYX1a2QRguWtdrW67Op0YUOaEcxBZKn1kRDva3DoNwk9b2pyGId4D43fsNrdBc00lnYofwco');
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
@@ -148,6 +150,33 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
+const makePayment = async(req, res) => {
+  const {cartItems: products} = req.body;
+
+  const lineItems = products.map((product)=>({
+      price_data:{
+          currency:"inr",
+          product_data:{
+              name:product.name,
+              images:[product.image]
+          },
+          unit_amount:product.price * 100,
+      },
+      quantity:product.qty
+  }));
+
+  const session = await stripe.checkout.sessions.create({
+      payment_method_types:["card"],
+      line_items:lineItems,
+      mode:"payment",
+      success_url:"http://localhost:3000/sucess",
+      cancel_url:"http://localhost:3000/cancel",
+  });
+
+  res.json({id:session.id})
+
+}
+
 export {
   addOrderItems,
   getMyOrders,
@@ -155,4 +184,5 @@ export {
   updateOrderToPaid,
   updateOrderToDelivered,
   getOrders,
+  makePayment
 };
