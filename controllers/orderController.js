@@ -174,7 +174,6 @@ const makePayment = async(req, res) => {
   });
 
   res.json({url: session.url})
-
 }
 
 export {
