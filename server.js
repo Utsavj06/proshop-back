@@ -8,6 +8,7 @@ const port = process.env.PORT || 5000
 import productRoute from './routes/productRoutes.js';
 import userRoute from './routes/userRoute.js'
 import orderRoutes from './routes/orderRoute.js'
+import paymentRoute from './routes/paymentRoute.js'
 import addProductRoute from './routes/addProductRoute.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -48,6 +49,7 @@ app.use('/api/products', productRoute)
 app.use('/api/users', userRoute)
 app.use('/api/orders', orderRoutes)
 app.use('/api/addProduct', addProductRoute)
+app.use('/api/process-payment', paymentRoute)
 
 app.use(notFound);
 app.use(errorHandler)
