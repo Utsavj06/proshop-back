@@ -52,7 +52,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       taxPrice,
       shippingPrice,
       totalPrice,
-      isPaid : paymentMethod === 'Credit Card' ? true : false,
+      isPaid : paymentMethod === 'Credit Card' ? true : false
     });
 
     const createdOrder = await order.save();
