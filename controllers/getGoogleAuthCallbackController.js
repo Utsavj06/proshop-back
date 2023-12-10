@@ -12,5 +12,5 @@ export const getGoogleAuthCallback = async (req, res) => {
 
     const token =  generateToken(res, id, email, name)
 
-    res.redirect(`http://localhost:3000/login?token=${token}&name=${name}&email=${email}`)
+    res.redirect(`https://proshop-front.onrender.com/login?token=${token}&name=${name}&email=${email}`)
 }
