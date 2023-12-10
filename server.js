@@ -1,7 +1,7 @@
 import express from'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
-import cors from 'cors'; // A
+import cors from 'cors';
 dotenv.config();
 import connectDB from './config/db.js';
 const port = process.env.PORT || 5000
@@ -11,6 +11,8 @@ import orderRoutes from './routes/orderRoute.js'
 import paymentRoute from './routes/paymentRoute.js'
 import addProductRoute from './routes/addProductRoute.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import getGoogleAuthRoute from './routes/googleAuthRoute.js'
+import getGoogleCallback from './routes/googleOAuthCallbackRoute.js'
 
 connectDB();
 
@@ -50,6 +52,8 @@ app.use('/api/users', userRoute)
 app.use('/api/orders', orderRoutes)
 app.use('/api/addProduct', addProductRoute)
 app.use('/api/process-payment', paymentRoute)
+app.use('/api/getGoogleAuth', getGoogleAuthRoute)
+app.use('/auth', getGoogleCallback)
 
 app.use(notFound);
 app.use(errorHandler)

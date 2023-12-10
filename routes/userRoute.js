@@ -11,6 +11,7 @@ import {
   updateUser,
 } from '../controllers/userController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
+import { getGoogleOauthUrlRoute } from '../controllers/getGoogleAuthController.js';
 
 const router = express.Router();
 
@@ -26,5 +27,6 @@ router
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById)
   .put(protect, admin, updateUser);
+router.get('/getGoogleOAuth', getGoogleOauthUrlRoute)
 
 export default router;
