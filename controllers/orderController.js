@@ -2,7 +2,6 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import { calcPrices } from '../utils/calcPrices.js';
-// import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
 import Stripe from 'stripe';
 
 const stripe = new Stripe('sk_test_51N2bqvSIEzY742rCxgOT7qV0PJmYX1a2QRguWtdrW67Op0YUOaEcxBZKn1kRDva3DoNwk9b2pyGId4D43fsNrdBc00lnYofwco');
