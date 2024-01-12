@@ -13,6 +13,7 @@ import addProductRoute from './routes/addProductRoute.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import getGoogleAuthRoute from './routes/googleAuthRoute.js'
 import getGoogleCallback from './routes/googleOAuthCallbackRoute.js'
+import getOrderDeli from './routes/getDeliveryOrderRoute.js'
 
 connectDB();
 
@@ -54,6 +55,7 @@ app.use('/api/addProduct', addProductRoute)
 app.use('/api/process-payment', paymentRoute)
 app.use('/api/getGoogleAuth', getGoogleAuthRoute)
 app.use('/auth', getGoogleCallback)
+app.use('/api/delivery', getOrderDeli)
 
 app.use(notFound);
 app.use(errorHandler)
