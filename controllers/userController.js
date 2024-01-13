@@ -1,13 +1,34 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
+import DeliverAgent from "../models/deliveryAgent.js";
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  // console.log(req)
+  const { email, password, youAre } = req.body;
+
+  if(youAre){
+    const agent = await DeliverAgent.findOne({ email });
+  
+    if (agent && (await agent.matchPassword(password))) {    
+      
+      const token =  generateToken(res, agent._id);
+      
+      res.json({
+        _id: agent._id,
+        name: agent.name,
+        email: agent.email,
+        deliveryAgent: true,
+        token
+      });
+    } else {
+      res.status(401);
+      throw new Error('Invalid email or password');
+    }
+    
+  }
 
   const user = await User.findOne({ email });
 
