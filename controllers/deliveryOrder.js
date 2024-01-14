@@ -1,9 +1,8 @@
-import DeliverAgent from "../models/deliveryAgent.js";
+import Order from "../models/orderModel.js";
 
 const deliveryDetail = async(req, res) => {
-  const Orders = await DeliverAgent.find({});
-  console.log(Orders)
-  res.json({mess:'success'});
+  const Orders = await Order.find({});
+  res.json({Orders});
 }
 
 export {

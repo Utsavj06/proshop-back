@@ -7,9 +7,9 @@ import DeliverAgent from "../models/deliveryAgent.js";
 // @route   POST /api/users/auth
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  const { email, password, youAre } = req.body;
+  const { email, password, isDeliveryingAgent } = req.body;
 
-  if(youAre){
+  if(isDeliveryingAgent){
     const agent = await DeliverAgent.findOne({ email });
   
     if (agent && (await agent.matchPassword(password))) {    
