@@ -1,7 +1,7 @@
 import Order from "../models/orderModel.js";
 
 const deliveryDetail = async(req, res) => {
-  const Orders = await Order.find({});
+  const Orders = await Order.find({isDelivered: false});
   res.json({Orders});
 }
 
