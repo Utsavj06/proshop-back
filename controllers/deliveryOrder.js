@@ -5,6 +5,12 @@ const deliveryDetail = async(req, res) => {
   res.json({Orders});
 }
 
+const deliverySuccess = async(req, res) => {
+  await Order.updateOne({_id: req.body.orderId},{isDelivered: true, isPaid: true});
+  res.json({message:'done'});
+}
+
 export {
-  deliveryDetail
+  deliveryDetail,
+  deliverySuccess
 };
