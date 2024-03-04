@@ -13,6 +13,7 @@
     "googleapis": "^129.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.6.3",
+    "nodemailer": "^6.9.11",
     "stripe": "^14.5.0"
   },
   "scripts": {
