@@ -208,6 +208,9 @@ const updateUser = asyncHandler(async (req, res) => {
 const resetPassword = async(req, res) => {
   const { frgtEml } = req.body;
   const user = await User.findOne({email:frgtEml});
+  if(!user){
+    return res.status(404).json({ error: "User not found" });
+  }
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -230,7 +233,7 @@ const resetPassword = async(req, res) => {
     if (error) {
       return console.log(error);
     }
-    // console.log('Message sent: %s', info.messageId);
+    console.log('Message sent: %s', info.messageId);
   });
   res.json({});
 };
