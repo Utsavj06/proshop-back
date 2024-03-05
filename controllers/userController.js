@@ -225,7 +225,7 @@ const resetPassword = async(req, res) => {
     to: user.email, // List of recipients
     subject: "Password Reset", // Subject line
     text: "Want to Reset Password", // Plain text body
-    html: "<p>Hear Is the Link, Change it Please</p>", // HTML body
+    html: `<p>Hear is the Link, <a href='https://proshop-front.onrender.com/'>click to change<a></p>`, // HTML body
   };
 
   // Send mail with defined transport object
