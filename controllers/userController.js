@@ -4,6 +4,7 @@ import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
 import DeliverAgent from "../models/deliveryAgent.js";
 import ResetToken from "../models/passwordResetToken.js";
+import bcrypt from 'bcryptjs'
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
@@ -213,10 +214,15 @@ const resetPassword = async(req, res) => {
     return res.status(404).json({ error: "User not found" });
   }
 
+
+  const salt = await bcrypt.genSalt(0);
+  const token = await bcrypt.hash(frgtEml, salt);
+
+  console.log(token, token.split(','))
   const resetToken = await ResetToken.create({
-    email:'uts',
-    token:'12',
-    time:'1232'
+    email:'tsa',// Use user's email
+    token: token.split(',')[0],
+    time: new Date(), 
   });
 
   console.log(resetToken)
