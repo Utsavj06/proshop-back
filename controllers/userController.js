@@ -3,6 +3,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
 import DeliverAgent from "../models/deliveryAgent.js";
+import ResetToken from "../models/passwordResetToken.js";
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
@@ -211,6 +212,15 @@ const resetPassword = async(req, res) => {
   if(!user){
     return res.status(404).json({ error: "User not found" });
   }
+
+  const resetToken = await ResetToken.create({
+    email:'uts',
+    token:'12',
+    time:'1232'
+  });
+
+  console.log(resetToken)
+
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
