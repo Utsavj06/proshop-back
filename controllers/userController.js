@@ -4,7 +4,7 @@ import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
 import DeliverAgent from "../models/deliveryAgent.js";
 import ResetToken from "../models/passwordResetToken.js";
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
@@ -207,51 +207,76 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-const resetPassword = async(req, res) => {
+const resetPassword = async (req, res) => {
   const { frgtEml } = req.body;
-  const user = await User.findOne({email:frgtEml});
-  if(!user){
+  const user = await User.findOne({ email: frgtEml });
+  if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
 
-
+  const tokenExist = await ResetToken.findOne({ email: frgtEml });
+  let resetToken;
   const salt = await bcrypt.genSalt(0);
   const token = await bcrypt.hash(frgtEml, salt);
+  const shortToken = token.substring(0, 10);
 
-  console.log(token, token.split(','))
-  const resetToken = await ResetToken.create({
-    email:'tsa',// Use user's email
-    token: token.split(',')[0],
-    time: new Date(), 
-  });
-
-  console.log(resetToken)
+  if (tokenExist) {
+    resetToken = await ResetToken.findOneAndUpdate(
+      { email: frgtEml },
+      { token: shortToken, time: new Date() }
+    );
+  } else {
+    resetToken = await ResetToken.create({
+      email: user.email,
+      token: shortToken,
+      time: new Date(),
+    });
+  }
 
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "utsav96jaiswal@gmail.com", // Your email address
-      pass: "xivqulyawyhpmjsx", // Your password
+      user: "utsav96jaiswal@gmail.com", 
+      pass: "xivqulyawyhpmjsx",
     },
   });
 
-  // Setup email data with unicode symbols
   let mailOptions = {
     from: "utsav96jaiswal@gmail.com>", // Sender address
     to: user.email, // List of recipients
     subject: "Password Reset", // Subject line
     text: "Want to Reset Password", // Plain text body
-    html: `<p>Hear is the Link, <a href='https://proshop-front.onrender.com/forget-password?email=utsav98&&token=123'>click to change<a></p>`, // HTML body
+    html: `<p>Hear is the Link, <a href=https://proshop-front.onrender.com/forget-password?email=${user.email}&&token=${shortToken}>click to change<a></p>`, // HTML body
   };
 
-  // Send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       return console.log(error);
     }
-    console.log('Message sent: %s', info.messageId);
+    console.log("Message sent: %s", info.messageId);
   });
   res.json({});
+};
+
+const getUpPass = async (req, res) => {
+  const { email, newPass, token } = req.body;
+
+  const updateUser = await ResetToken.findOne({ email });
+
+  var timeDiff = new Date().getTime() - new Date(updateUser.time).getTime();
+  var tmeInMinutes = timeDiff / (1000 * 60);
+
+  if (Math.floor(tmeInMinutes) < 6) {
+    if (token === updateUser.token) {
+      const hashedPassword = await bcrypt.hash(newPass, 10);
+      await User.findOneAndUpdate({ email }, { password: hashedPassword });
+      return res.status(200).send("Password updated successfully");
+    } else {
+      return res.status(404).send(`Token doesn't match`);
+    }
+  } else {
+    return res.status(404).send("Time has been exceeded");
+  }
 };
 
 export {
@@ -265,4 +290,5 @@ export {
   getUserById,
   updateUser,
   resetPassword,
+  getUpPass,
 };

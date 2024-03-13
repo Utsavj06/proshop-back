@@ -10,6 +10,7 @@ import {
   getUserById,
   updateUser,
   resetPassword,
+  getUpPass,
 } from "../controllers/userController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 import { getGoogleOauthUrlRoute } from "../controllers/getGoogleAuthController.js";
@@ -30,5 +31,6 @@ router
   .put(protect, admin, updateUser);
 router.get("/getGoogleOAuth", getGoogleOauthUrlRoute);
 router.post("/reset-pass", resetPassword);
+router.post("/update-password", getUpPass);
 
 export default router;
