@@ -266,13 +266,13 @@ const getUpPass = async (req, res) => {
   var timeDiff = new Date().getTime() - new Date(updateUser.time).getTime();
   var tmeInMinutes = timeDiff / (1000 * 60);
 
-  if (Math.floor(tmeInMinutes) < 6) {
+  if (Math.floor(tmeInMinutes) > 6) {
     if (token === updateUser.token) {
       const hashedPassword = await bcrypt.hash(newPass, 10);
       await User.findOneAndUpdate({ email }, { password: hashedPassword });
       return res.status(200).send("Password updated successfully");
     } else {
-      return res.status(404).send(`Token doesn't match`);
+      return res.status(401).send(`Token doesn't match`);
     }
   } else {
     return res.status(404).send("Time has been exceeded");
